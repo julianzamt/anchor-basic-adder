@@ -10,15 +10,25 @@ describe("anchor-basic-adder", () => {
 
   const program = anchor.workspace.AnchorBasicAdder as Program<AnchorBasicAdder>;
 
-  it("Add 5", async () => {
-    const tx = await program.methods.add(5).rpc();
-
+  it("Add & Double Test", async () => {
     const [counterPubkey] = await findProgramAddressSync([
-      Buffer.from('COUNTER_TAG')
+      Buffer.from('counter')
     ], program.programId)
     
-    const counter = await program.account.counter.fetch(counterPubkey);
+    await program.methods.add(500).accounts({
+      counter: counterPubkey
+    }).rpc();
 
-    expect(counter.number).to.equal(5);
+    const counterAfterAdd = await program.account.counter.fetch(counterPubkey);
+
+    expect(counterAfterAdd.number).to.equal(500);
+
+    await program.methods.double().accounts({
+      counter: counterPubkey
+    }).rpc();
+
+    const counterAfterDouble = await program.account.counter.fetch(counterPubkey);
+
+    expect(counterAfterDouble.number).to.equal(1000);
   });
 });

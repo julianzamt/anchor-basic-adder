@@ -12,6 +12,8 @@ pub mod errors;
 
 pub mod utils;
 
+pub mod stubs;
+
 use crate::instructions::*;
 
 #[program]

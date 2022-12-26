@@ -1,6 +1,6 @@
 use anchor_lang::prelude::*;
 
-use crate::{constants::*, state::*};
+use crate::{constants::*, state::*, stubs::*};
 
 #[derive(Accounts)]
 pub struct Add<'info> {
@@ -23,7 +23,7 @@ pub struct Add<'info> {
 pub fn handler(ctx: Context<Add>, number: u32) -> Result<()> {
     let counter = &mut ctx.accounts.counter;
 
-    counter.number += number;
+    add_stub::ix_logic(counter, number)?;
 
     Ok(())
 }
